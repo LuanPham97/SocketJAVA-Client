@@ -5,7 +5,12 @@
  */
 package pkg18424039.client;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
+import java.util.StringTokenizer;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -13,6 +18,11 @@ import java.net.Socket;
  */
 public class MyClient extends javax.swing.JFrame
 {
+
+    String iD, clientID = "";
+    DataInputStream din;
+    DataOutputStream dout;
+    DefaultListModel dlm;
 
     /**
      * Creates new form MyClient
@@ -24,7 +34,58 @@ public class MyClient extends javax.swing.JFrame
 
     MyClient(String id, Socket s)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        iD = id;
+        try
+        {
+            initComponents();
+            dlm = new DefaultListModel();
+            UL.setModel(dlm);
+            lblID.setText(id);
+            din = new DataInputStream(s.getInputStream());
+            dout = new DataOutputStream(s.getOutputStream());
+            new Read().start();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    class Read extends Thread
+    {
+
+        public void run()
+        {
+            while (true)
+            {
+                try
+                {
+                    String m = din.readUTF();
+                    if (m.contains(":;.,/="))
+                    {
+                        m = m.substring(6);
+                        dlm.clear();
+                        StringTokenizer st = new StringTokenizer(m, ",");
+                        while (st.hasMoreTokens())
+                        {
+                            String u = st.nextToken();
+                            if (iD.equals(u) == false)
+                            {
+                                dlm.addElement(u);
+                            }
+                            else
+                            {
+                                msgBox.append("" + m + "\n");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -38,18 +99,103 @@ public class MyClient extends javax.swing.JFrame
     {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        lblID = new javax.swing.JLabel();
+        btnSelectAll = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        btnSend = new javax.swing.JButton();
+        txtMsg = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        UL = new javax.swing.JList();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        msgBox = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("Hello:");
+
+        lblID.setText("...................");
+
+        btnSelectAll.setText("Select All");
+        btnSelectAll.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnSelectAllActionPerformed(evt);
+            }
+        });
+
+        jSeparator2.setBackground(new java.awt.Color(0, 0, 0));
+
+        btnSend.setText("Send");
+        btnSend.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnSendActionPerformed(evt);
+            }
+        });
+
+        txtMsg.setForeground(new java.awt.Color(204, 231, 112));
+        txtMsg.setText("message");
+        txtMsg.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                txtMsgActionPerformed(evt);
+            }
+        });
+
+        jScrollPane3.setViewportView(UL);
+
+        msgBox.setColumns(20);
+        msgBox.setRows(5);
+        jScrollPane1.setViewportView(msgBox);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 605, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblID)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSelectAll))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 365, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(lblID)
+                    .addComponent(btnSelectAll))
+                .addGap(32, 32, 32)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator2)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSend)
+                    .addComponent(txtMsg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -60,11 +206,28 @@ public class MyClient extends javax.swing.JFrame
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSelectAllActionPerformed
+    {//GEN-HEADEREND:event_btnSelectAllActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSelectAllActionPerformed
+
+    private void btnSendActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSendActionPerformed
+    {//GEN-HEADEREND:event_btnSendActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnSendActionPerformed
+
+    private void txtMsgActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtMsgActionPerformed
+    {//GEN-HEADEREND:event_txtMsgActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMsgActionPerformed
 
     /**
      * @param args the command line arguments
@@ -116,6 +279,16 @@ public class MyClient extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList UL;
+    private javax.swing.JButton btnSelectAll;
+    private javax.swing.JButton btnSend;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JLabel lblID;
+    private javax.swing.JTextArea msgBox;
+    private javax.swing.JTextField txtMsg;
     // End of variables declaration//GEN-END:variables
 }
