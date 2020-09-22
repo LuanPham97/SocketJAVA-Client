@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.StringTokenizer;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,7 +19,7 @@ import javax.swing.DefaultListModel;
  */
 public class MyClient extends javax.swing.JFrame
 {
-
+    
     String iD, clientID = "";
     DataInputStream din;
     DataOutputStream dout;
@@ -31,7 +32,7 @@ public class MyClient extends javax.swing.JFrame
     {
         initComponents();
     }
-
+    
     MyClient(String id, Socket s)
     {
         iD = id;
@@ -50,10 +51,10 @@ public class MyClient extends javax.swing.JFrame
             e.printStackTrace();
         }
     }
-
+    
     class Read extends Thread
     {
-
+        
         public void run()
         {
             while (true)
@@ -221,7 +222,30 @@ public class MyClient extends javax.swing.JFrame
 
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnSendActionPerformed
     {//GEN-HEADEREND:event_btnSendActionPerformed
-        // TODO add your handling code here:
+        try
+        {
+            String m = txtMsg.getText();
+            String mm = m;
+            String CI = clientID;
+            
+            if (clientID.isEmpty() == false)
+            {
+                m = "#4344554@@@@@67667@@" + CI + ":" + mm;
+                dout.writeUTF(m);
+                txtMsg.setText("");
+                msgBox.append("You sent to " + CI + " > " + mm + "\n");
+            }
+            else
+            {
+                dout.writeUTF(m);
+                txtMsg.setText("");
+                msgBox.append("You to ALL > "+mm+"\n");
+            }
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(this, "User does not exist anymore");
+        }
     }//GEN-LAST:event_btnSendActionPerformed
 
     private void txtMsgActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_txtMsgActionPerformed
