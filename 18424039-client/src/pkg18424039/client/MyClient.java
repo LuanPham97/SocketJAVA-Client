@@ -230,7 +230,7 @@ public class MyClient extends javax.swing.JFrame
             
             if (clientID.isEmpty() == false)
             {
-                m = "#4344554@@@@@67667@@" + CI + ":" + mm;
+                m = "abcd" + CI + ":" + mm;
                 dout.writeUTF(m);
                 txtMsg.setText("");
                 msgBox.append("You sent to " + CI + " > " + mm + "\n");
