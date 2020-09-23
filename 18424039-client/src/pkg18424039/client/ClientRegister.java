@@ -5,6 +5,7 @@
  */
 package pkg18424039.client;
 
+import java.awt.event.KeyEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
@@ -49,6 +50,13 @@ public class ClientRegister extends javax.swing.JFrame
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 txtIDActionPerformed(evt);
+            }
+        });
+        txtID.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                txtIDKeyPressed(evt);
             }
         });
 
@@ -121,21 +129,22 @@ public class ClientRegister extends javax.swing.JFrame
 
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnConnectActionPerformed
     {//GEN-HEADEREND:event_btnConnectActionPerformed
-         try
+        try
         {
-            String id=txtID.getText();
-            
-            Socket s=new Socket("localhost", 2089);
-            DataInputStream din= new DataInputStream(s.getInputStream());
-            DataOutputStream dout=new DataOutputStream(s.getOutputStream());
+            String id = txtID.getText();
+
+            Socket s = new Socket("localhost", 2089);
+            DataInputStream din = new DataInputStream(s.getInputStream());
+            DataOutputStream dout = new DataOutputStream(s.getOutputStream());
             dout.writeUTF(id);
-            String i=new DataInputStream(s.getInputStream()).readUTF();
+            String i = new DataInputStream(s.getInputStream()).readUTF();
             if (i.equals("You are already registered"))
             {
                 JOptionPane.showMessageDialog(this, i);
             }
-            else{
-                new MyClient(id,s).setVisible(true);
+            else
+            {
+                new MyClient(id, s).setVisible(true);
                 this.dispose();
             }
         }
@@ -149,6 +158,14 @@ public class ClientRegister extends javax.swing.JFrame
     {//GEN-HEADEREND:event_txtIDActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIDActionPerformed
+
+    private void txtIDKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtIDKeyPressed
+    {//GEN-HEADEREND:event_txtIDKeyPressed
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            btnConnectActionPerformed(null);
+        }
+    }//GEN-LAST:event_txtIDKeyPressed
 
     /**
      * @param args the command line arguments
