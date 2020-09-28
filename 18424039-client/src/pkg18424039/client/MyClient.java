@@ -5,6 +5,7 @@
  */
 package pkg18424039.client;
 
+import java.awt.event.KeyEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class MyClient extends javax.swing.JFrame
 {
-    
+
     String iD, clientID = "";
     DataInputStream din;
     DataOutputStream dout;
@@ -32,7 +33,7 @@ public class MyClient extends javax.swing.JFrame
     {
         initComponents();
     }
-    
+
     MyClient(String id, Socket s)
     {
         iD = id;
@@ -51,10 +52,10 @@ public class MyClient extends javax.swing.JFrame
             e.printStackTrace();
         }
     }
-    
+
     class Read extends Thread
     {
-        
+
         public void run()
         {
             while (true)
@@ -76,12 +77,13 @@ public class MyClient extends javax.swing.JFrame
                             }
                             else
                             {
-                                msgBox.append("" + m + "\n");
+                                //msgBox.append(m + " is just registered\n");
                             }
                         }
                     }
-                    else{
-                          msgBox.append(m + "\n");
+                    else
+                    {
+                        msgBox.append(m + "\n");
                     }
                 }
                 catch (Exception e)
@@ -105,7 +107,6 @@ public class MyClient extends javax.swing.JFrame
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblID = new javax.swing.JLabel();
-        btnSelectAll = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         btnSend = new javax.swing.JButton();
         txtMsg = new javax.swing.JTextField();
@@ -121,15 +122,6 @@ public class MyClient extends javax.swing.JFrame
 
         lblID.setText("...................");
 
-        btnSelectAll.setText("Select All");
-        btnSelectAll.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                btnSelectAllActionPerformed(evt);
-            }
-        });
-
         jSeparator2.setBackground(new java.awt.Color(0, 0, 0));
 
         btnSend.setText("Send");
@@ -141,13 +133,18 @@ public class MyClient extends javax.swing.JFrame
             }
         });
 
-        txtMsg.setForeground(new java.awt.Color(204, 231, 112));
-        txtMsg.setText("message");
         txtMsg.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
                 txtMsgActionPerformed(evt);
+            }
+        });
+        txtMsg.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
+                txtMsgKeyPressed(evt);
             }
         });
 
@@ -163,34 +160,31 @@ public class MyClient extends javax.swing.JFrame
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblID)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSelectAll))
+                        .addComponent(lblID))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtMsg, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                            .addComponent(txtMsg))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))))
                 .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(lblID)
-                    .addComponent(btnSelectAll))
-                .addGap(32, 32, 32)
+                    .addComponent(lblID))
+                .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jSeparator2)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
@@ -230,7 +224,7 @@ public class MyClient extends javax.swing.JFrame
             String m = txtMsg.getText();
             String mm = m;
             String CI = clientID;
-            
+
             if (clientID.isEmpty() == false)
             {
                 m = "abcd" + CI + ":" + mm;
@@ -242,7 +236,7 @@ public class MyClient extends javax.swing.JFrame
             {
                 dout.writeUTF(m);
                 txtMsg.setText("");
-                msgBox.append("You to ALL > "+mm+"\n");
+                msgBox.append("<You to ALL> " + mm + "\n");
             }
         }
         catch (Exception e)
@@ -255,6 +249,14 @@ public class MyClient extends javax.swing.JFrame
     {//GEN-HEADEREND:event_txtMsgActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMsgActionPerformed
+
+    private void txtMsgKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_txtMsgKeyPressed
+    {//GEN-HEADEREND:event_txtMsgKeyPressed
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            btnSendActionPerformed(null);
+        }
+    }//GEN-LAST:event_txtMsgKeyPressed
 
     /**
      * @param args the command line arguments
@@ -307,7 +309,6 @@ public class MyClient extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList UL;
-    private javax.swing.JButton btnSelectAll;
     private javax.swing.JButton btnSend;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
