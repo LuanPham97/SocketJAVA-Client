@@ -80,6 +80,9 @@ public class MyClient extends javax.swing.JFrame
                             }
                         }
                     }
+                    else{
+                          msgBox.append(m + "\n");
+                    }
                 }
                 catch (Exception e)
                 {
